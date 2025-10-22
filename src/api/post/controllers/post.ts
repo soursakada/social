@@ -37,6 +37,25 @@ export default factories.createCoreController('api::post.post', ({ strapi }) => 
             ctx.throw(500, error);
         }
     },
+    async postDetail(ctx) {
+        try {
+            const service = strapi.service('api::post.post');
+            const servicePoster = strapi.service('api::poster.poster');
+            const userChat = getUserIdFromToken(ctx.request.header.authorization);
+            const checkOrCreatePoster = await servicePoster.checkOrCreatePoster({
+                name: userChat?.username || "New User",
+                profileURL: "",
+                external: userChat?.chat_key ? userChat.chat_key.toString() : "",
+            });
+            const poster = checkOrCreatePoster.data.id ?? null;
+            const { id } = ctx.params;
+            const documentId = id
+            const posts = await service.myPosts({ documentId });
+            ctx.body = posts;
+        } catch (error) {
+            ctx.throw(500, error);
+        }
+    },
     async uploadFile(ctx) {
         try {
             const { files } = ctx.request; // get files from multipart/form-data

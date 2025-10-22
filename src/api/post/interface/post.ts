@@ -17,6 +17,10 @@ export interface FetchPostProps {
     poster: string
 }
 
+export interface FetchPostOneProps {
+    documentId: string;
+}
+
 export interface createPostProps {
     poster: string
     caption: string

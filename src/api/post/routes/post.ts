@@ -18,6 +18,14 @@ export default {
             },
         },
         {
+            method: 'GET',
+            path: '/post-detail/:id',
+            handler: 'post.postDetail',
+            config: {
+                auth: false,
+            },
+        },
+        {
             method: 'POST',
             path: '/create-post',
             handler: 'post.createPost',

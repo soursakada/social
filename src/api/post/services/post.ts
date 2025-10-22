@@ -2,7 +2,7 @@
 
 import { BaseService } from "../../../util/base-service";
 import { QueryParams } from "../../../util/query-helper";
-import { createPostProps, FetchPostProps, Post } from "../interface/post";
+import { createPostProps, FetchPostOneProps, FetchPostProps, Post } from "../interface/post";
 
 
 class PostService extends BaseService<Post> {
@@ -103,6 +103,38 @@ class PostService extends BaseService<Post> {
 
         // Build custom response
         return this.createResponse(data, { page, pageSize, total, message: "fetch post successfully" });
+    }
+
+    // my posts
+    async postDetail({ documentId }: FetchPostOneProps) {
+
+        const data = await this.findOne(documentId, {
+            populate: {
+                poster: true,
+                comments: {
+                    populate: {
+                        commenter: true,
+                        parentComment: {
+                            populate: { commenter: true }
+                        },
+                        childrenComment: {
+                            populate: { commenter: true }
+                        }
+                    },
+                },
+                reactions: {
+                    populate: {
+                        reacter: true,
+                    },
+                },
+                image: {
+                    fields: ["id", "name", "url"]
+                }
+            },
+        })
+
+        // Build custom response
+        return this.createResponse(data, { message: "fetch post successfully" });
     }
 
     // upload file
