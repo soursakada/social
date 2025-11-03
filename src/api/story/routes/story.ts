@@ -13,8 +13,8 @@ export default {
             config: { auth: false },
         },
         {
-            method: "GET",
-            path: "/stories",
+            method: "POST",
+            path: "/get-stories",
             handler: "story.getStories",
             config: { auth: false },
         },
