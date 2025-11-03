@@ -19,6 +19,18 @@
     },
     "external": {
       "type": "string"
+    },
+    "stories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::story.story",
+      "mappedBy": "poster"
+    },
+    "viewers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::story.story",
+      "inversedBy": "viewedBy"
     }
   }
 }

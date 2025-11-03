@@ -48,6 +48,16 @@
       "relation": "oneToMany",
       "target": "api::reaction.reaction",
       "mappedBy": "post"
+    },
+    "video": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }

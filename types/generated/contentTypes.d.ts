@@ -441,6 +441,10 @@ export interface ApiPostPost extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    video: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
   };
 }
 
@@ -468,9 +472,11 @@ export interface ApiPosterPoster extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String;
     profileURL: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    stories: Schema.Attribute.Relation<'oneToMany', 'api::story.story'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    viewers: Schema.Attribute.Relation<'manyToMany', 'api::story.story'>;
   };
 }
 
@@ -501,6 +507,35 @@ export interface ApiReactionReaction extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiStoryStory extends Struct.CollectionTypeSchema {
+  collectionName: 'stories';
+  info: {
+    displayName: 'Story';
+    pluralName: 'stories';
+    singularName: 'story';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    caption: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    expiredAt: Schema.Attribute.DateTime;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::story.story'> &
+      Schema.Attribute.Private;
+    poster: Schema.Attribute.Relation<'manyToOne', 'api::poster.poster'>;
+    publishedAt: Schema.Attribute.DateTime;
+    src: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    viewedBy: Schema.Attribute.Relation<'manyToMany', 'api::poster.poster'>;
   };
 }
 
@@ -1017,6 +1052,7 @@ declare module '@strapi/strapi' {
       'api::post.post': ApiPostPost;
       'api::poster.poster': ApiPosterPoster;
       'api::reaction.reaction': ApiReactionReaction;
+      'api::story.story': ApiStoryStory;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
