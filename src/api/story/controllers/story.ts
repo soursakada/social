@@ -1,4 +1,5 @@
 import { factories } from "@strapi/strapi";
+import { getUserIdFromToken } from "../../../util/auth";
 
 export default factories.createCoreController("api::story.story", ({ strapi }) => ({
 
@@ -20,7 +21,16 @@ export default factories.createCoreController("api::story.story", ({ strapi }) =
     /** Create story after media uploaded */
     async createStory(ctx) {
         try {
-            const { caption, userId, srcId } = ctx.request.body;
+            const { caption, srcId } = ctx.request.body;
+
+            const servicePoster = strapi.service('api::poster.poster');
+            const userChat = getUserIdFromToken(ctx.request.header.authorization);
+            const checkOrCreatePoster = await servicePoster.checkOrCreatePoster({
+                name: userChat?.username || "New User",
+                profileURL: "",
+                external: userChat?.chat_key ? userChat.chat_key.toString() : "",
+            });
+            const userId = checkOrCreatePoster.data.id ?? null;
 
             if (!userId) return ctx.badRequest("Missing userId");
 
@@ -48,7 +58,15 @@ export default factories.createCoreController("api::story.story", ({ strapi }) =
     },
 
     async markViewed(ctx) {
-        const { storyId, userId } = ctx.request.body;
+        const { storyId } = ctx.request.body;
+        const servicePoster = strapi.service('api::poster.poster');
+        const userChat = getUserIdFromToken(ctx.request.header.authorization);
+        const checkOrCreatePoster = await servicePoster.checkOrCreatePoster({
+            name: userChat?.username || "New User",
+            profileURL: "",
+            external: userChat?.chat_key ? userChat.chat_key.toString() : "",
+        });
+        const userId = checkOrCreatePoster.data.id ?? null;
         const service = strapi.service("api::story.story");
         ctx.body = await service.markViewed(storyId, userId);
     },
