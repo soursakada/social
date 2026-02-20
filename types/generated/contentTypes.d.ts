@@ -373,6 +373,37 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBacklogBacklog extends Struct.CollectionTypeSchema {
+  collectionName: 'backlogs';
+  info: {
+    displayName: 'Backlog';
+    pluralName: 'backlogs';
+    singularName: 'backlog';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::backlog.backlog'
+    > &
+      Schema.Attribute.Private;
+    project: Schema.Attribute.Relation<'manyToMany', 'api::project.project'>;
+    publishedAt: Schema.Attribute.DateTime;
+    tasks: Schema.Attribute.Relation<'manyToMany', 'api::task.task'>;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCommentComment extends Struct.CollectionTypeSchema {
   collectionName: 'comments';
   info: {
@@ -480,6 +511,42 @@ export interface ApiPosterPoster extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiProjectProject extends Struct.CollectionTypeSchema {
+  collectionName: 'projects';
+  info: {
+    displayName: 'Project';
+    pluralName: 'projects';
+    singularName: 'project';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    backlogs: Schema.Attribute.Relation<'manyToMany', 'api::backlog.backlog'>;
+    code: Schema.Attribute.UID<'title'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    groupRoomId: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::project.project'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sprints: Schema.Attribute.Relation<'manyToMany', 'api::sprint.sprint'>;
+    tasks: Schema.Attribute.Relation<'manyToMany', 'api::task.task'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiReactionReaction extends Struct.CollectionTypeSchema {
   collectionName: 'reactions';
   info: {
@@ -504,6 +571,37 @@ export interface ApiReactionReaction extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     react: Schema.Attribute.Enumeration<['love', 'sad', 'happy']>;
     reacter: Schema.Attribute.Relation<'oneToOne', 'api::poster.poster'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSprintSprint extends Struct.CollectionTypeSchema {
+  collectionName: 'sprints';
+  info: {
+    displayName: 'Sprint';
+    pluralName: 'sprints';
+    singularName: 'sprint';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::sprint.sprint'
+    > &
+      Schema.Attribute.Private;
+    project: Schema.Attribute.Relation<'manyToMany', 'api::project.project'>;
+    publishedAt: Schema.Attribute.DateTime;
+    tasks: Schema.Attribute.Relation<'manyToMany', 'api::task.task'>;
+    title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -536,6 +634,39 @@ export interface ApiStoryStory extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     viewedBy: Schema.Attribute.Relation<'manyToMany', 'api::poster.poster'>;
+  };
+}
+
+export interface ApiTaskTask extends Struct.CollectionTypeSchema {
+  collectionName: 'tasks';
+  info: {
+    displayName: 'Task';
+    pluralName: 'tasks';
+    singularName: 'task';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    backlog: Schema.Attribute.Relation<'manyToMany', 'api::backlog.backlog'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    date: Schema.Attribute.DateTime;
+    description: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::task.task'> &
+      Schema.Attribute.Private;
+    projects: Schema.Attribute.Relation<'manyToMany', 'api::project.project'>;
+    publishedAt: Schema.Attribute.DateTime;
+    sprint: Schema.Attribute.Relation<'manyToMany', 'api::sprint.sprint'>;
+    state: Schema.Attribute.Enumeration<
+      ['backlog', 'sprint', 'processing', 'verify', 'completed']
+    >;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1048,11 +1179,15 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::backlog.backlog': ApiBacklogBacklog;
       'api::comment.comment': ApiCommentComment;
       'api::post.post': ApiPostPost;
       'api::poster.poster': ApiPosterPoster;
+      'api::project.project': ApiProjectProject;
       'api::reaction.reaction': ApiReactionReaction;
+      'api::sprint.sprint': ApiSprintSprint;
       'api::story.story': ApiStoryStory;
+      'api::task.task': ApiTaskTask;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

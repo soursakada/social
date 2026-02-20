@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sprints",
+  "info": {
+    "singularName": "sprint",
+    "pluralName": "sprints",
+    "displayName": "Sprint"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "project": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::project.project",
+      "inversedBy": "sprints"
+    },
+    "tasks": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::task.task",
+      "inversedBy": "sprint"
+    }
+  }
+}

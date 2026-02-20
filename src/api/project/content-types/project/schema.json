@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "projects",
+  "info": {
+    "singularName": "project",
+    "pluralName": "projects",
+    "displayName": "Project"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "code": {
+      "type": "uid",
+      "targetField": "title",
+      "required": false
+    },
+    "backlogs": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::backlog.backlog",
+      "mappedBy": "project"
+    },
+    "sprints": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::sprint.sprint",
+      "mappedBy": "project"
+    },
+    "tasks": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::task.task",
+      "mappedBy": "projects"
+    },
+    "groupRoomId": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

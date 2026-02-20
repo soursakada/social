@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "backlogs",
+  "info": {
+    "singularName": "backlog",
+    "pluralName": "backlogs",
+    "displayName": "Backlog"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "project": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::project.project",
+      "inversedBy": "backlogs"
+    },
+    "tasks": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::task.task",
+      "inversedBy": "backlog"
+    }
+  }
+}

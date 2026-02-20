@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tasks",
+  "info": {
+    "singularName": "task",
+    "pluralName": "tasks",
+    "displayName": "Task"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "backlog",
+        "sprint",
+        "processing",
+        "verify",
+        "completed"
+      ]
+    },
+    "date": {
+      "type": "datetime"
+    },
+    "backlog": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::backlog.backlog",
+      "mappedBy": "tasks"
+    },
+    "sprint": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::sprint.sprint",
+      "mappedBy": "tasks"
+    },
+    "projects": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::project.project",
+      "inversedBy": "tasks"
+    }
+  }
+}
